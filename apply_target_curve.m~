@@ -98,13 +98,12 @@ Hd_Mag(isinf(Hd_Mag)) = 0;
 
 % Determine degree of filtering
 % alpha = exp^(-1/(0.5*fs));
-alpha = 0.5;
 
 % Make output for prev_value storage
 output = 0;
 
 % Run through the EMA
-for i=2:size(Hd_Mag, 2)
+for i=2:size(Hd_mag, 2)
    
     Hd_Mag(:,i) = (alpha * output) + ((1-alpha) * Hd_Mag(:,i));
     output = Hd_Mag(:,i);

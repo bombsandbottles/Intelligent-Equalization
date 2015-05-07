@@ -7,7 +7,7 @@
 function [ normalized_mags ] = normalize_magMatrix( x )
 
 % Normalize Each Frame (0,1).  Divide mags by max mag per frame
-for i=1:length( x );
+for i=1:size(x, 2);
     
     % Grab a frame
     frame = x(:,i);
@@ -19,8 +19,6 @@ for i=1:length( x );
         % Normalize a frame
         x(:,i) = frame/(max(frame));
     end
-    
-
     
 end
 

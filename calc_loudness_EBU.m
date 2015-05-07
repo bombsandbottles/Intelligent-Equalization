@@ -9,8 +9,8 @@
 function [ LU, active_frames ] = calc_loudness_EBU( x_t, fs, fftparams )
 
 % Resample for K-Filter, coefficients are made for 48khz
-[p, q] = rat(48000/fs);
-x_t = resample(x_t, p, q);
+% [p, q] = rat(48000/fs);
+% x_t = resample(x_t, p, q);
 
 % -------------------------------------------------------------------------
 % K-frequency weighting (perceptual filtering)

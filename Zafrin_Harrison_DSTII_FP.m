@@ -60,7 +60,12 @@ X_mag_avg = mag2db(X_mag_avg);
 % -------------------------------------------------------------------------
 
 % Import Audio File
-[x_t, fs, t] = import_audio('BS_BTI.wav');
+% [x_t, fs, t] = import_audio('BS_BTI.wav');
+
+% Noise Test
+fs = 44100;
+x_t = rand(1,44100); 
+x_t  = x_t - mean(x_t);
 
 % Determine Active Frames for Analysis
 [ LU, active_frames ] = calc_loudness_EBU( x_t, fs, fftparams );
