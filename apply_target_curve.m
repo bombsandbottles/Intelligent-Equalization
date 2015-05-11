@@ -114,6 +114,38 @@ end
 % Obtain filter coefficients via Yule-Walker, N is 16 accroding to lit.
 % -------------------------------------------------------------------------
 
-[b,a] = yulewalk(16, hertz_vector/(fs/2) , Hd_Mag(:,i));
+% Create Normalized Frequency Vector
+f = hertz_vector/(fs/2);
+f = f';
+
+% Filter x_t frame by frame with dynamic magnitude via Yule-Walker
+for i=1:size(Hd_Mag, 2)
+    
+    % Get IIR coeffs for a frame
+    [b, a] = yulewalk(15, f, Hd_Mag(:,i));
+    
+    % Filter a frame, load into filterd matrix
+    x_t_filt(:,i) = filt(b, a, x_t_windowed(:,i));
+    
+end
+
+% -------------------------------------------------------------------------
+% OLA Unbuffer
+% -------------------------------------------------------------------------
+
+% Pre-Allocate Output Vector
+[win_length, num_win] = size(x_t_filt);
+hop_size = win_length/2;
+x_t_unbuffered = zeros(((num_win-1) * hop_size)+win_length, 1);
+
+% Unbuffer the Windowed Kernel
+for i=1:num_win
+    seg_start    = (i-1)*hop_size+1;
+    seg_end      = (i*win_length)-(hop_size*(i-1));
+    x_t_unbuffered(seg_start:seg_end)  = x_t_unbuffered(seg_start:seg_end) + x_t_filt(:,i); 
+end
+
+% Transpose the Signal
+filtered_output = x_t_unbuffered';
 
 end

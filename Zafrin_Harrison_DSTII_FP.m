@@ -70,13 +70,7 @@ x_t  = x_t - mean(x_t);
 % Determine Active Frames for Analysis
 [ LU, active_frames ] = calc_loudness_EBU( x_t, fs, fftparams );
 
-% Test Plot, Show The Active Frames
-% -------------------------------------------------------------------------
-plot(active_frames);
-hold on;
-plot(LU);
-
-% Filter the 
+% Filter the audio
 [ filtered_output ] = apply_target_curve( x_t, T_mag, fftparams, fs, active_frames );
 
                                                           
@@ -87,4 +81,12 @@ semilogx(freq_vector, X_mag_avg);
 hold on;
 semilogx(freq_vector, filtered_spectrum, 'g');
 set(gca,'XTickLabel',num2str(get(gca,'XTick').'));
+
+
+% Test Plot, Show The Active Frames
+% -------------------------------------------------------------------------
+plot(active_frames);
+hold on;
+plot(LU);
+
 % -------------------------------------------------------------------------
