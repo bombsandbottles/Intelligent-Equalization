@@ -9,8 +9,8 @@
 % performed, and the desired magnitude resposne is obtained to create the
 % desired transfer funnction
 % -------------------------------------------------------------------------
-function [ filtered_output ] = apply_target_curve( x_t, T_mag, fftparams,...
-                                                    fs, active_frames)
+function [ filtered_output, x_t_filt ] = apply_target_curve( x_t, T_mag, fftparams,...
+                                                            fs, active_frames)
 
 % -------------------------------------------------------------------------
 % Perform an STFT of the incoming signal
@@ -39,10 +39,26 @@ X_mag = abs(fft(x_t_windowed));
 % Remove Mirror Image past fs/2
 X_mag = X_mag(1:end/2, :);
 
-% Thresholding of magnitudes below 0.0001
-% X_mag = X_mag(X_mag > 0.0001);
+% -------------------------------------------------------------------------
+% Threshold magnitudes below 0.0001
+% -------------------------------------------------------------------------
+for i=1:size(X_mag, 2)
+    
+    % Grab a frame
+    frame = X_mag(:,i);
+    
+    for j=1:length(frame)
+        if frame(j) < 0.0001
+            frame(j) = 0.0001;
+        end
+    end
+    
+    % Put back into Magitude matrix    
+    X_mag(:,i) = frame;
+    
+end
 
-[ X_mag ] = normalize_magMatrix( X_mag );
+% [ X_mag ] = normalize_magMatrix( X_mag );
 
 % -------------------------------------------------------------------------
 % Obtain Desired Magnitude Response Per Frame
@@ -56,39 +72,60 @@ hertz_vector = [0, 20, 25, 31.5, 40, 50, 63, 80, 100, 125, 160, 200, 250,...
 % The bins in bin_vector correspond to the freqs in hertz_vector
 bin_vector = 1+floor((fftparams.win_size-1)*(hertz_vector/fs));
 
-% Create previous frame
-prev_frame = zeros(size(X_mag, 1), 1);
+T_mag = T_mag(bin_vector);
 
-% Obtain Desired Magnitude Response for a Frame
+% Obtain Desired Magnitude Response
 for i=1:size(X_mag, 2)
     
-    % If the Frame is Active, We Grab it
-    if active_frames(i) == 1
-        
-        % Grab a frame
-        frame = X_mag(:,i);
-        
-    % Otherwise we use the previous active frame
-    elseif active_frames(i) == 0
-        frame = prev_frame;
-        
+    % Grab a frame
+    frame = X_mag(:,i);
+    frame = frame';
+    frame = frame(bin_vector);
+    
+    % Perform |T(w)| / |X(w)| for each w (frequency bin)    
+    for j=1:length(frame)
+        desired_mag(j) = T_mag(j) / frame(j);
     end
-  
-    % implement 3.3.1 dry/wet HERE!!!!!!    
 
     % Create the Desired Magnitude Response for Frame (i)
-    Hd_Mag(:,i) = T_mag(bin_vector)./frame(bin_vector)';
-    
-    % Store current frame into previous frame
-    prev_frame = frame;
+    Hd_Mag(:,i) = desired_mag;
 
 end
 
-% Remove NaNs and -Infs
-Hd_Mag(isnan(Hd_Mag)) = 0;
-Hd_Mag(isinf(Hd_Mag)) = 0;
+% Create previous frame
+% prev_frame = zeros(size(X_mag, 1), 1);
 
-[ Hd_Mag ] = normalize_magMatrix( Hd_Mag );
+% % Obtain Desired Magnitude Response for a Frame
+% for i=1:size(X_mag, 2)
+%     
+%     % If the Frame is Active, We Grab it
+%     if active_frames(i) == 1
+%         
+%         % Grab a frame
+%         frame = X_mag(:,i);
+%         
+%     % Otherwise we use the previous active frame
+%     elseif active_frames(i) == 0
+%         
+%         frame = prev_frame;
+%         
+%     end
+%   
+%     % implement 3.3.1 dry/wet HERE!!!!!!    
+% 
+%     % Create the Desired Magnitude Response for Frame (i)
+%     Hd_Mag(:,i) = T_mag(bin_vector)./frame(bin_vector)';
+%     
+%     % Store current frame into previous frame
+%     prev_frame = frame;
+% 
+% end
+
+% Remove NaNs and -Infs
+% Hd_Mag(isnan(Hd_Mag)) = 0;
+% Hd_Mag(isinf(Hd_Mag)) = 0;
+
+% [ Hd_Mag ] = normalize_magMatrix( Hd_Mag );
 
 % -------------------------------------------------------------------------
 % Filter Curve Smoothing via Exponential Moving Average
@@ -98,7 +135,7 @@ Hd_Mag(isinf(Hd_Mag)) = 0;
 
 % Determine degree of filtering
 % alpha = exp^(-1/(0.5*fs));
-alpha = 0.5;
+alpha = 0.9;
 
 % Make output for prev_value storage
 output = 0;
@@ -112,24 +149,64 @@ end
 
 % -------------------------------------------------------------------------
 % Obtain filter coefficients via Yule-Walker, N is 16 accroding to lit.
+% Then filter with an IIR filter
 % -------------------------------------------------------------------------
 
 % Create Normalized Frequency Vector
 f = hertz_vector/(fs/2);
 f = f';
 
+% Pre-Allocate Zeros for Difference Equation
+y_buff = zeros(1,16); 
+x_buff = zeros(1,16);
+
 % Filter x_t frame by frame with dynamic magnitude via Yule-Walker
 for i=1:size(Hd_Mag, 2)
     
     % Get IIR coeffs for a frame
-    [b, a] = yulewalk(15, f, Hd_Mag(:,i));
+    [b, a] = yulewalk(16, f, Hd_Mag(:,i));
     
-    % Filter a frame, load into filterd matrix
-    x_t_filt(:,i) = filt(b, a, x_t_windowed(:,i));
+    % Grab active frame
+    frame = x_t_windowed(:,i);
+    
+    % Apply IIR filter via difference equation
+    for n=1:length(frame)
+       
+        % Run the diff equation
+        filt_frame(n) = (b(1)*frame(n))     + (b(2)*x_buff(1))   + ...
+                        (b(3)*x_buff(2))    + (b(4)*x_buff(3))   + ...
+                        (b(5)*x_buff(4))    + (b(6)*x_buff(5))   + ...
+                        (b(7)*x_buff(6))    + (b(8)*x_buff(7))   + ...
+                        (b(9)*x_buff(8))    + (b(10)*x_buff(9))  + ...
+                        (b(11)*x_buff(10))  + (b(12)*x_buff(11)) + ...
+                        (b(13)*x_buff(12))  + (b(14)*x_buff(13)) + ...
+                        (b(15)*x_buff(14))  + (b(16)*x_buff(15)) + ...
+                        (b(17)*x_buff(16))  - ...
+                        (a(2)*y_buff(1))    - ...
+                        (a(3)*y_buff(2))    - (a(4)*y_buff(3))   - ...
+                        (a(5)*y_buff(4))    - (a(6)*y_buff(5))   - ...
+                        (a(7)*y_buff(6))    - (a(8)*y_buff(7))   - ...
+                        (a(9)*y_buff(8))    - (a(10)*y_buff(9))  - ...
+                        (a(11)*y_buff(10))  - (a(12)*y_buff(11)) - ...
+                        (a(13)*y_buff(12))  - (a(14)*y_buff(13)) - ...
+                        (a(15)*y_buff(14))  - (a(16)*y_buff(15)) - ...
+                        (a(17)*y_buff(16));
+        
+        % Shift the Samples in the Equation So That x-1 == n etc.
+        x_buff(2:end) = x_buff(1:end-1);
+        x_buff(1) = frame(n);
+        
+        % Shift the Samples in the Equation So That y-1 == n etc.
+        y_buff(2:end) = y_buff(1:end-1);
+        y_buff(1) = filt_frame(n);
+        
+    end
+    
+    % Load into Filtered Matrix
+    x_t_filt(:,i) = filt_frame;
     
 end
 
-% -------------------------------------------------------------------------
 % OLA Unbuffer
 % -------------------------------------------------------------------------
 

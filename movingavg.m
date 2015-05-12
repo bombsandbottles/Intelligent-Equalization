@@ -2,9 +2,9 @@
 % Harrison Zafrin hzz200
 % X_mag_avg = avg spectrum of all mag spectrums together
 % -------------------------------------------------------------------------
-% Manual implementation of centerd moving average filter
+% Manual implementation of centerd moving average filter, only above 200hz
 % -------------------------------------------------------------------------
-function [ filtered_spectrum ] = movingavgfilter_17pnt( X_mag_avg, size, fftparams, fs)
+function [ filtered_spectrum ] = movingavg( X_mag_avg, size, fftparams, fs)
 
 temp = X_mag_avg;
 
@@ -12,28 +12,12 @@ temp = X_mag_avg;
 % This section takes the moving average of the entire signal as normal
 % -------------------------------------------------------------------------
 
-% Pad amount
-pad_amt = (size-1)/2;
+% Create mavg params
+b = (1/size)*ones(1,size);
+a = 1;
 
-% Get zeros to append for y-1->y-8
-left = zeros(1, pad_amt);
-right = zeros(1, pad_amt);
-
-% Concat Them All to zero-pad front and back
-X_mag_avg = [left X_mag_avg' right];
-
-% Offline buffer for moving average based on size
-win_size = size;
-hop_size = 1;
-
-% Get amount of sample overlap per window
-n_overlap = win_size - hop_size;
-
-% Buffer with n_overlap
-X_mag_avg = buffer(X_mag_avg, win_size, n_overlap, 'nodelay');
-
-% Use the Power of MATLAB to avg the windows
-filtered_spectrum = mean(X_mag_avg);
+% Filter those vals above 200hz
+y = filter(b, a, X_mag_avg);
 
 % -------------------------------------------------------------------------
 % This section then appends the original <200hz values back and keeps the 
@@ -56,8 +40,23 @@ end
 X_b200 = temp(1:k-1);
 
 % Values of X_mag_avg above 200hz
-X_a200 = filtered_spectrum(k:end);
+X_a200 = y(k:end);
 
-filtered_spectrum = [X_b200' X_a200];
+% Create mavg params
+b = (1/size)*ones(1,size);
+a = 1;
+
+% Put them back together
+filtered_spectrum = [X_b200 ; y];
 
 end
+
+
+% -------------------------------------------------------------------------
+% Test Code IGNORE
+% -------------------------------------------------------------------------
+% Matlab Moving Average?
+% windowSize = 17;
+% b = (1/windowSize)*ones(1,windowSize);
+% a = 1;
+% y = filter(b, a, X_mag_avg);

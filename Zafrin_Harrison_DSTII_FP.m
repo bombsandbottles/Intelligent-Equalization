@@ -4,8 +4,6 @@
 % -------------------------------------------------------------------------
 clear;
 clc;
-% % Import Audio File
-% [x_t, fs, t] = import_audio('BS_BTI.wav');
 
 % -------------------------------------------------------------------------
 % Create Target Database
@@ -52,41 +50,43 @@ end
 % Convert to dB
 X_mag_avg = mag2db(X_mag_avg);
 
+% Smooth the curve with a 17 point moving average filter using MATLAB filt
+[ T_mag_matlab ] = movingavg( X_mag_avg, 17, fftparams, fs );
+
 % Smooth the curve with a 17 point moving average filter
-[ T_mag ] = movingavgfilter_17pnt( X_mag_avg, 17 );
+[ T_mag ] = movingavgfilter_17pnt( X_mag_avg, 17, fftparams, fs );
+
+% -------------------------------------------------------------------------
+% Figure comparing averaged Target EQ Curves
+% -------------------------------------------------------------------------
+figure;
+semilogx(X_mag_avg);
+hold on;
+semilogx(T_mag_matlab, 'r');
+hold on;
+semilogx(T_mag, 'g');
+set(gca,'XTickLabel',num2str(get(gca,'XTick').'));
 
 % -------------------------------------------------------------------------
 % Apply Target Curve to Analyzed Audio
 % -------------------------------------------------------------------------
 
 % Import Audio File
-% [x_t, fs, t] = import_audio('BS_BTI.wav');
+[x_t, fs, t] = import_audio('Three Nineteen Fifteen.aif');
 
 % Noise Test
-fs = 44100;
-x_t = rand(1,44100); 
-x_t  = x_t - mean(x_t);
+% fs = 44100;
+% x_t = rand(1,44100*10); 
+% x_t  = x_t - mean(x_t);
 
 % Determine Active Frames for Analysis
 [ LU, active_frames ] = calc_loudness_EBU( x_t, fs, fftparams );
 
 % Filter the audio
-[ filtered_output ] = apply_target_curve( x_t, T_mag, fftparams, fs, active_frames );
-
+[ filtered_output, x_t_filt ] = apply_target_curve( x_t, T_mag, fftparams, fs, active_frames );
                                                           
 % -------------------------------------------------------------------------
 % Test Plot
 % -------------------------------------------------------------------------
-semilogx(freq_vector, X_mag_avg);
-hold on;
-semilogx(freq_vector, filtered_spectrum, 'g');
-set(gca,'XTickLabel',num2str(get(gca,'XTick').'));
-
-
-% Test Plot, Show The Active Frames
-% -------------------------------------------------------------------------
-plot(active_frames);
-hold on;
-plot(LU);
 
 % -------------------------------------------------------------------------

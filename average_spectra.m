@@ -9,13 +9,24 @@
 % This function takes a 4096 point STFT of x_t and returns the averaged magnitude
 % spectra across time into 4096 bins with about 10hz resolution per bin
 % -------------------------------------------------------------------------
-function [ X_mag, X_mag_mean, X_mag_cum, fs ] = average_spectra( filepath, fftparams )
+function [ X_mag, X_mag_mean, X_mag_cum, fs ] = average_spectra( filepath, fftparams, discrete_signal )
 
-% Import Audio
-[x_t, unused, fs, t] = import_audio_stereo( filepath );
+% Perform averaging on a .wav
+if nargin < 3
+    % Import Audio
+    [x_t, unused, fs, t] = import_audio_stereo( filepath );
 
-% lol
-unused = unused/2;
+    % lol
+    unused = unused/2;
+    
+% Perform averaging on a currently discretized signal for testing
+elseif nargin == 3
+    
+    filepath = 0;
+    fs = 44100;
+    x_t = discrete_signal;
+    
+end
 
 % Find the length of x_t
 x_len = length(x_t);
