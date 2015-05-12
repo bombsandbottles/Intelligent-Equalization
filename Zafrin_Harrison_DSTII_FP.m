@@ -72,21 +72,34 @@ set(gca,'XTickLabel',num2str(get(gca,'XTick').'));
 % -------------------------------------------------------------------------
 
 % Import Audio File
-[x_t, fs, t] = import_audio('Three Nineteen Fifteen.aif');
+% [x_t, fs, t] = import_audio('Three Nineteen Fifteen.aif');
 
 % Noise Test
-% fs = 44100;
-% x_t = rand(1,44100*10); 
-% x_t  = x_t - mean(x_t);
+fs = 44100;
+x_t = rand(1,44100*10); 
+x_t  = x_t - mean(x_t);
 
 % Determine Active Frames for Analysis
 [ LU, active_frames ] = calc_loudness_EBU( x_t, fs, fftparams );
 
 % Filter the audio
-[ filtered_output, x_t_filt ] = apply_target_curve( x_t, T_mag, fftparams, fs, active_frames );
+[ filtered_output, x_t_filt, x_t_windowed ] = apply_target_curve( x_t, T_mag, fftparams, fs, active_frames );
                                                           
 % -------------------------------------------------------------------------
-% Test Plot
+% Compare our filtered spectrum to the target spectrum
 % -------------------------------------------------------------------------
+
+% Get the spectrum of the filtered output
+[ output_spectrum ] = average_spectra_matrix( x_t_filt, filtered_output );
+% Get the spectrum of the filtered output
+[ original_spectrum ] = average_spectra_matrix( x_t_windowed, x_t );
+
+figure;
+semilogx(T_mag, 'b');
+hold on;
+semilogx(output_spectrum, 'r');
+hold on;
+semilogx(original_spectrum, 'k');
+set(gca,'XTickLabel',num2str(get(gca,'XTick').'));
 
 % -------------------------------------------------------------------------

@@ -9,7 +9,7 @@
 % performed, and the desired magnitude resposne is obtained to create the
 % desired transfer funnction
 % -------------------------------------------------------------------------
-function [ filtered_output, x_t_filt ] = apply_target_curve( x_t, T_mag, fftparams,...
+function [ filtered_output, x_t_filt, x_t_windowed ] = apply_target_curve( x_t, T_mag, fftparams,...
                                                             fs, active_frames)
 
 % -------------------------------------------------------------------------
@@ -125,7 +125,17 @@ end
 % Hd_Mag(isnan(Hd_Mag)) = 0;
 % Hd_Mag(isinf(Hd_Mag)) = 0;
 
-% [ Hd_Mag ] = normalize_magMatrix( Hd_Mag );
+
+% -------------------------------------------------------------------------
+% Normalize Hd_Mag so that |Hd(w)| is between 0 and 1
+% -------------------------------------------------------------------------
+% Noramlize Across COLUMNS, Coefficients Across Time
+for i=1:size(Hd_Mag, 2)
+        Hd_Mag(:, i) = ( Hd_Mag(:, i) )/ norm(Hd_Mag(:, i), 2);
+end
+
+% Hd_Mag = abs(Hd_Mag);
+
 
 % -------------------------------------------------------------------------
 % Filter Curve Smoothing via Exponential Moving Average
@@ -207,7 +217,9 @@ for i=1:size(Hd_Mag, 2)
     
 end
 
-% OLA Unbuffer
+% -------------------------------------------------------------------------
+% OLA Unbuffer, This section converts the filtered matrix back to mono 
+% audio stream
 % -------------------------------------------------------------------------
 
 % Pre-Allocate Output Vector
