@@ -71,19 +71,26 @@ set(gca,'XTickLabel',num2str(get(gca,'XTick').'));
 % Apply Target Curve to Analyzed Audio
 % -------------------------------------------------------------------------
 
-% Import Audio File
-% [x_t, fs, t] = import_audio('Three Nineteen Fifteen.aif');
+% Import Female Audio File
+[x_t, fs, t] = import_audio('Three Nineteen Fifteen.aif');
 
 % Noise Test
-fs = 44100;
-x_t = rand(1,44100*10); 
-x_t  = x_t - mean(x_t);
+% fs = 44100;
+% x_t = rand(1,44100*10); 
+% x_t  = x_t - mean(x_t);
 
 % Determine Active Frames for Analysis
 [ LU, active_frames ] = calc_loudness_EBU( x_t, fs, fftparams );
 
 % Filter the audio
 [ filtered_output, x_t_filt, x_t_windowed ] = apply_target_curve( x_t, T_mag, fftparams, fs, active_frames );
+
+% TESTING
+% Get the magnitude response via STFT and subsequent removing of phase
+x_t_filt = abs(fft(x_t_filt));
+
+% Remove Mirror Image past fs/2
+x_t_filt = x_t_filt(1:end/2, :);
                                                           
 % -------------------------------------------------------------------------
 % Compare our filtered spectrum to the target spectrum
@@ -91,8 +98,17 @@ x_t  = x_t - mean(x_t);
 
 % Get the spectrum of the filtered output
 [ output_spectrum ] = average_spectra_matrix( x_t_filt, filtered_output );
+[ output_spectrum ] = movingavgfilter_17pnt( output_spectrum, 17, fftparams, fs );
 % Get the spectrum of the filtered output
 [ original_spectrum ] = average_spectra_matrix( x_t_windowed, x_t );
+[ original_spectrum ] = movingavgfilter_17pnt( original_spectrum, 17, fftparams, fs );
+
+% Normalize the frame
+T_mag = T_mag/(max(abs(T_mag)));
+% Normalize the frame
+output_spectrum = output_spectrum/(max(abs(output_spectrum)));
+% Normalize the frame
+original_spectrum = original_spectrum/(max(abs(original_spectrum)));
 
 figure;
 semilogx(T_mag, 'b');

@@ -58,7 +58,22 @@ for i=1:size(X_mag, 2)
     
 end
 
-% [ X_mag ] = normalize_magMatrix( X_mag );
+% Normalize Magnitudes in X_mag
+% -------------------------------------------------------------------------
+
+for i=1:size(X_mag, 2)
+   
+    % Grab a frame
+    frame = X_mag(:,i);
+    
+    % Normalize the frame
+    frame = frame/(max(abs(frame)));
+    
+    % Put back into Magitude matrix    
+    X_mag(:,i) = frame;
+    
+end
+
 
 % -------------------------------------------------------------------------
 % Obtain Desired Magnitude Response Per Frame
@@ -74,52 +89,46 @@ bin_vector = 1+floor((fftparams.win_size-1)*(hertz_vector/fs));
 
 T_mag = T_mag(bin_vector);
 
-% Obtain Desired Magnitude Response
-for i=1:size(X_mag, 2)
-    
-    % Grab a frame
-    frame = X_mag(:,i);
-    frame = frame';
-    frame = frame(bin_vector);
-    
-    % Perform |T(w)| / |X(w)| for each w (frequency bin)    
-    for j=1:length(frame)
-        desired_mag(j) = T_mag(j) / frame(j);
-    end
-
-    % Create the Desired Magnitude Response for Frame (i)
-    Hd_Mag(:,i) = desired_mag;
-
-end
-
 % Create previous frame
 % prev_frame = zeros(size(X_mag, 1), 1);
 
-% % Obtain Desired Magnitude Response for a Frame
-% for i=1:size(X_mag, 2)
-%     
-%     % If the Frame is Active, We Grab it
+% Obtain Desired Magnitude Response
+for i=1:size(X_mag, 2)
+    
+    % If the Frame is Active, We Grab it
 %     if active_frames(i) == 1
-%         
-%         % Grab a frame
-%         frame = X_mag(:,i);
-%         
-%     % Otherwise we use the previous active frame
+    
+        % Grab a frame
+        frame = X_mag(:,i);
+        frame = frame';
+        frame = frame(bin_vector);
+
+        % Perform |T(w)| / |X(w)| for each w (frequency bin)    
+        for j=1:length(frame)
+            desired_mag(j) = T_mag(j) / frame(j);
+        end
+
+        % Load the Desired Magnitude Response for Frame (i)
+        Hd_Mag(:,i) = desired_mag;
+    
 %     elseif active_frames(i) == 0
 %         
 %         frame = prev_frame;
 %         
+%         % Perform |T(w)| / |X(w)| for each w (frequency bin)    
+%         for j=1:length(frame)
+%             desired_mag(j) = T_mag(j) / frame(j);
+%         end
+%         
+%         % Load the Desired Magnitude Response for Frame (i)
+%         Hd_Mag(:,i) = desired_mag;
+%         
 %     end
-%   
-%     % implement 3.3.1 dry/wet HERE!!!!!!    
-% 
-%     % Create the Desired Magnitude Response for Frame (i)
-%     Hd_Mag(:,i) = T_mag(bin_vector)./frame(bin_vector)';
 %     
 %     % Store current frame into previous frame
 %     prev_frame = frame;
-% 
-% end
+
+end
 
 % Remove NaNs and -Infs
 % Hd_Mag(isnan(Hd_Mag)) = 0;
@@ -134,8 +143,8 @@ for i=1:size(Hd_Mag, 2)
         Hd_Mag(:, i) = ( Hd_Mag(:, i) )/ norm(Hd_Mag(:, i), 2);
 end
 
-% Hd_Mag = abs(Hd_Mag);
-
+% Put into 0,1 instead of 0,-1
+Hd_Mag = abs(Hd_Mag);
 
 % -------------------------------------------------------------------------
 % Filter Curve Smoothing via Exponential Moving Average
@@ -143,9 +152,9 @@ end
 % Hm is the current frame
 % -------------------------------------------------------------------------
 
-% Determine degree of filtering
-% alpha = exp^(-1/(0.5*fs));
-alpha = 0.9;
+% Determine degree of filtering, tau = 0.5
+% alpha = exp(-1/(0.5*fs));
+alpha = 0.5;
 
 % Make output for prev_value storage
 output = 0;
