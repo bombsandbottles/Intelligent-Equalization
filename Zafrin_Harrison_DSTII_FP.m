@@ -118,3 +118,11 @@ ylabel('Magnitude (dB)') % y-axis label
 legend('Target Spectrum','Filtered Spectrum', 'Original Spectrum')
 
 % -------------------------------------------------------------------------
+
+% Normalize
+filtered_output = filtered_output/abs(max(filtered_output));
+x_t = x_t/abs(max(x_t));
+
+% Write Out
+audiowrite('filtered_vocal_0.9.wav', filtered_output, fs)
+audiowrite('raw_vocal.wav', x_t, fs)
