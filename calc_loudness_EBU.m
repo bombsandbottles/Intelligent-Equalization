@@ -2,7 +2,7 @@
 % Harrison Zafrin hzz200
 % x_t = time domain signal
 % fs = sampling rate
-% win_size = RMS window size, this equals FFT size in other analysis
+% fftparams = RMS window size, this equals FFT size in other analysis,
 % -------------------------------------------------------------------------
 % Loudness Calculation for EBU loudness R- 128
 % -------------------------------------------------------------------------

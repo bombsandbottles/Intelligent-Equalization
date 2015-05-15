@@ -1,8 +1,10 @@
 % DSTII Final Project %
 % Harrison Zafrin hzz200
+% filtered_spectrum = output smoothed magnitudes spectrum
+% size = size of the moving average filter
 % X_mag_avg = avg spectrum of all mag spectrums together
 % -------------------------------------------------------------------------
-% Manual implementation of centerd moving average filter
+% Manual homebrew implementation of centerd moving average filter
 % -------------------------------------------------------------------------
 function [ filtered_spectrum ] = movingavgfilter_17pnt( X_mag_avg, size, fftparams, fs)
 

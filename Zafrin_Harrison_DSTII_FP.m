@@ -1,6 +1,7 @@
 % DSTII Final Project %
 % Harrison Zafrin hzz200
 % Intelligent Equalization tool using Yule-Walker Method
+% This script runs everything else!
 % -------------------------------------------------------------------------
 clear;
 clc;
@@ -60,12 +61,17 @@ X_mag_avg = mag2db(X_mag_avg);
 % Figure comparing averaged Target EQ Curves
 % -------------------------------------------------------------------------
 figure;
-semilogx(X_mag_avg);
+semilogx(freq_vector, X_mag_avg);
 hold on;
-semilogx(T_mag_matlab, 'r');
-hold on;
-semilogx(T_mag, 'g');
+semilogx(freq_vector, T_mag, 'r');
+axis([0 fs/2 -120 0])
 set(gca,'XTickLabel',num2str(get(gca,'XTick').'));
+title('Target Spectra Comparison');
+xlabel('Frequency in Hz') % x-axis label
+ylabel('Magnitude (dB)') % y-axis label
+legend('Unsmoothed','Smoothed')
+
+
 
 % -------------------------------------------------------------------------
 % Apply Target Curve to Analyzed Audio
@@ -84,13 +90,6 @@ set(gca,'XTickLabel',num2str(get(gca,'XTick').'));
 
 % Filter the audio
 [ filtered_output, x_t_filt, x_t_windowed ] = apply_target_curve( x_t, T_mag, fftparams, fs, active_frames );
-
-% TESTING
-% Get the magnitude response via STFT and subsequent removing of phase
-x_t_filt = abs(fft(x_t_filt));
-
-% Remove Mirror Image past fs/2
-x_t_filt = x_t_filt(1:end/2, :);
                                                           
 % -------------------------------------------------------------------------
 % Compare our filtered spectrum to the target spectrum
@@ -98,24 +97,24 @@ x_t_filt = x_t_filt(1:end/2, :);
 
 % Get the spectrum of the filtered output
 [ output_spectrum ] = average_spectra_matrix( x_t_filt, filtered_output );
-[ output_spectrum ] = movingavgfilter_17pnt( output_spectrum, 17, fftparams, fs );
+output_spectrum = output_spectrum + 20;
+
 % Get the spectrum of the filtered output
 [ original_spectrum ] = average_spectra_matrix( x_t_windowed, x_t );
-[ original_spectrum ] = movingavgfilter_17pnt( original_spectrum, 17, fftparams, fs );
 
-% Normalize the frame
-T_mag = T_mag/(max(abs(T_mag)));
-% Normalize the frame
-output_spectrum = output_spectrum/(max(abs(output_spectrum)));
-% Normalize the frame
-original_spectrum = original_spectrum/(max(abs(original_spectrum)));
-
+% Plot The Results
+% -------------------------------------------------------------------------
 figure;
-semilogx(T_mag, 'b');
+semilogx(freq_vector, T_mag, 'b');
 hold on;
-semilogx(output_spectrum, 'r');
+semilogx(freq_vector, output_spectrum, 'r');
 hold on;
-semilogx(original_spectrum, 'k');
+semilogx(freq_vector, original_spectrum, 'k');
+axis([0 22050 -120 0])
 set(gca,'XTickLabel',num2str(get(gca,'XTick').'));
+title('Before/After Equalization');
+xlabel('Frequency in Hz') % x-axis label
+ylabel('Magnitude (dB)') % y-axis label
+legend('Target Spectrum','Filtered Spectrum', 'Original Spectrum')
 
 % -------------------------------------------------------------------------

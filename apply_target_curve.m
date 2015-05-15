@@ -2,7 +2,9 @@
 % Harrison Zafrin hzz200
 % x_t = time domain signal
 % fs = sampling rate
-% win_size = RMS window size, this equals FFT size in other analysis
+% fftparams = consistent FFT Parameters
+% active_frames = a vector containing the frames which are active in x_t
+% T_mag = target magnitude response
 % -------------------------------------------------------------------------
 % Perform spectral matching via custom IIR filter with coefficients
 % generated via least squares Yule Walker.  A spectral analysis is
@@ -96,7 +98,7 @@ T_mag = T_mag(bin_vector);
 for i=1:size(X_mag, 2)
     
     % If the Frame is Active, We Grab it
-%     if active_frames(i) == 1
+    if active_frames(i) == 1
     
         % Grab a frame
         frame = X_mag(:,i);
@@ -111,28 +113,28 @@ for i=1:size(X_mag, 2)
         % Load the Desired Magnitude Response for Frame (i)
         Hd_Mag(:,i) = desired_mag;
     
-%     elseif active_frames(i) == 0
-%         
-%         frame = prev_frame;
-%         
-%         % Perform |T(w)| / |X(w)| for each w (frequency bin)    
-%         for j=1:length(frame)
-%             desired_mag(j) = T_mag(j) / frame(j);
-%         end
-%         
-%         % Load the Desired Magnitude Response for Frame (i)
-%         Hd_Mag(:,i) = desired_mag;
-%         
-%     end
-%     
-%     % Store current frame into previous frame
-%     prev_frame = frame;
+    elseif active_frames(i) == 0
+        
+        frame = prev_frame;
+        
+        % Perform |T(w)| / |X(w)| for each w (frequency bin)    
+        for j=1:length(frame)
+            desired_mag(j) = T_mag(j) / frame(j);
+        end
+        
+        % Load the Desired Magnitude Response for Frame (i)
+        Hd_Mag(:,i) = desired_mag;
+        
+    end
+    
+    % Store current frame into previous frame
+    prev_frame = frame;
 
 end
 
 % Remove NaNs and -Infs
-% Hd_Mag(isnan(Hd_Mag)) = 0;
-% Hd_Mag(isinf(Hd_Mag)) = 0;
+Hd_Mag(isnan(Hd_Mag)) = 0;
+Hd_Mag(isinf(Hd_Mag)) = 0;
 
 
 % -------------------------------------------------------------------------
@@ -154,13 +156,13 @@ Hd_Mag = abs(Hd_Mag);
 
 % Determine degree of filtering, tau = 0.5
 % alpha = exp(-1/(0.5*fs));
-alpha = 0.5;
+alpha = 0.9;
 
 % Make output for prev_value storage
 output = 0;
 
 % Run through the EMA
-for i=2:size(Hd_Mag, 2)
+for i=1:size(Hd_Mag, 2)
    
     Hd_Mag(:,i) = (alpha * output) + ((1-alpha) * Hd_Mag(:,i));
     output = Hd_Mag(:,i);

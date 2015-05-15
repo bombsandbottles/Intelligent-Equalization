@@ -1,10 +1,8 @@
 % DSTII Final Project %
 % Harrison Zafrin hzz200
-% filtered_spectrum = output smoothed magnitudes spectrum
-% size = size of the moving average filter
 % X_mag_avg = avg spectrum of all mag spectrums together
 % -------------------------------------------------------------------------
-% M implementation of centerd moving average filter, only above 200hz
+% MATLAB BASED implementation of centerd moving average filter, only above 200hz
 % -------------------------------------------------------------------------
 function [ filtered_spectrum ] = movingavg( X_mag_avg, size, fftparams, fs)
 

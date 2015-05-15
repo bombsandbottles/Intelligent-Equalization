@@ -1,0 +1,12 @@
+\BOOKMARK [1][-]{section.1}{ 1. Introduction}{}% 1
+\BOOKMARK [1][-]{section.2}{ 2. Algorithm and Implementation}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{2.1 Creating the Target Spectra}{section.2}% 3
+\BOOKMARK [2][-]{subsection.2.2}{2.2 Hysteresis Noise Gate and Loudness Measurement}{section.2}% 4
+\BOOKMARK [2][-]{subsection.2.3}{2.3 Spectral Analysis}{section.2}% 5
+\BOOKMARK [2][-]{subsection.2.4}{2.4 Obtain Desired Magnitude Response}{section.2}% 6
+\BOOKMARK [2][-]{subsection.2.5}{2.5 Filter Curve Smoothing}{section.2}% 7
+\BOOKMARK [2][-]{subsection.2.6}{2.6 Obtaining IIR Coefficients Using the Yule-Walker Method}{section.2}% 8
+\BOOKMARK [2][-]{subsection.2.7}{2.7 Applying The Filter}{section.2}% 9
+\BOOKMARK [1][-]{section.3}{ 3. Results}{}% 10
+\BOOKMARK [1][-]{section.4}{ 4. Conclusion}{}% 11
+\BOOKMARK [1][-]{section.5}{ 5. References}{}% 12
