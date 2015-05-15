@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.5.25)  15 MAY 2015 02:41
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.5.25)  15 MAY 2015 10:04
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -456,7 +456,7 @@ Here is how much of TeX's memory you used:
  9282 multiletter control sequences out of 15000+600000
  14963 words of font info for 31 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 29i,14n,30p,1482b,458s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 29i,14n,30p,1485b,458s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2014/tex
 mf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/texlive/2014/texmf-dist/fonts/t
 ype1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2014/texmf-dist/fonts/ty
@@ -472,7 +472,7 @@ sfonts/cm/cmsy8.pfb></usr/local/texlive/2014/texmf-dist/fonts/type1/urw/courier
 b></usr/local/texlive/2014/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/lo
 cal/texlive/2014/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
 Output written on /Users/harrison/Desktop/Github/Intelligent-Equalization/Paper
-/Zafrin_Harrison_DSTII_FP.pdf (4 pages, 230516 bytes).
+/Zafrin_Harrison_DSTII_FP.pdf (4 pages, 230491 bytes).
 PDF statistics:
  190 PDF objects out of 1000 (max. 8388607)
  163 compressed objects within 2 object streams

@@ -1,15 +1,15 @@
 # Fdb version 3
-["bibtex Zafrin_Harrison_DSTII_FP"] 1431672096 "Zafrin_Harrison_DSTII_FP.aux" "Zafrin_Harrison_DSTII_FP.bbl" "Zafrin_Harrison_DSTII_FP" 1431672098
+["bibtex Zafrin_Harrison_DSTII_FP"] 1431672096 "Zafrin_Harrison_DSTII_FP.aux" "Zafrin_Harrison_DSTII_FP.bbl" "Zafrin_Harrison_DSTII_FP" 1431698645
   "/usr/local/texlive/2014/texmf-dist/bibtex/bst/IEEEtran/IEEEtran.bst" 1222816716 59506 016987d9be15acf51cdd7252d40ecec2 ""
-  "Zafrin_Harrison_DSTII_FP.aux" 1431672097 5135 d76533836f8288082dd2883adcd1cc43 ""
+  "Zafrin_Harrison_DSTII_FP.aux" 1431698645 5135 d76533836f8288082dd2883adcd1cc43 ""
   "Zafrin_Harrison_DSTII_FP.bcf" 0 -1 0 ""
   "Zafrin_Harrison_DSTII_FP.bib" 1431659397 1715 cb6bda67e07210440a45ba20e2cc1ced ""
   (generated)
-  "Zafrin_Harrison_DSTII_FP.bbl"
   "Zafrin_Harrison_DSTII_FP.blg"
-["pdflatex"] 1431672096 "/Users/harrison/Desktop/Github/Intelligent-Equalization/Paper/Zafrin_Harrison_DSTII_FP.tex" "/Users/harrison/Desktop/Github/Intelligent-Equalization/Paper/Zafrin_Harrison_DSTII_FP.pdf" "Zafrin_Harrison_DSTII_FP" 1431672098
-  "/Users/harrison/Desktop/Github/Intelligent-Equalization/Paper/Zafrin_Harrison_DSTII_FP.aux" 1431672097 5135 d76533836f8288082dd2883adcd1cc43 ""
-  "/Users/harrison/Desktop/Github/Intelligent-Equalization/Paper/Zafrin_Harrison_DSTII_FP.tex" 1431672090 21541 c5e11fe52bb05e5cace3e0b2c1710ae4 ""
+  "Zafrin_Harrison_DSTII_FP.bbl"
+["pdflatex"] 1431698644 "/Users/harrison/Desktop/Github/Intelligent-Equalization/Paper/Zafrin_Harrison_DSTII_FP.tex" "/Users/harrison/Desktop/Github/Intelligent-Equalization/Paper/Zafrin_Harrison_DSTII_FP.pdf" "Zafrin_Harrison_DSTII_FP" 1431698645
+  "/Users/harrison/Desktop/Github/Intelligent-Equalization/Paper/Zafrin_Harrison_DSTII_FP.aux" 1431698645 5135 d76533836f8288082dd2883adcd1cc43 ""
+  "/Users/harrison/Desktop/Github/Intelligent-Equalization/Paper/Zafrin_Harrison_DSTII_FP.tex" 1431698613 21542 1745d9982e4ab4c4164130d9d3ec31cd ""
   "/usr/local/texlive/2014/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/local/texlive/2014/texmf-dist/fonts/map/fontname/texfonts.map" 1272929888 3287 e6b82fe08f5336d4d5ebc73fb1152e87 ""
   "/usr/local/texlive/2014/texmf-dist/fonts/tfm/adobe/courier/pcrr7t.tfm" 1136768653 960 379cc0019370a9e0208a0a3f949f847a ""
@@ -80,10 +80,10 @@
   "/usr/local/texlive/2014/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1401025944 1445653 26a0aacf3d70032b1ec192e8c7792117 ""
   "/usr/local/texlive/2014/texmf-var/web2c/pdftex/pdflatex.fmt" 1401025990 3832012 904d82bdcc8abf2b1cd296990b82553b ""
   "/usr/local/texlive/2014/texmf.cnf" 1401025936 577 a59edbde8d3a8c549d0eeaab1739e2ff ""
-  "Zafrin_Harrison_DSTII_FP.aux" 1431672097 5135 d76533836f8288082dd2883adcd1cc43 ""
+  "Zafrin_Harrison_DSTII_FP.aux" 1431698645 5135 d76533836f8288082dd2883adcd1cc43 ""
   "Zafrin_Harrison_DSTII_FP.bbl" 1431672096 2113 92310480776e0e2d8df7399b7669b5aa "bibtex Zafrin_Harrison_DSTII_FP"
-  "Zafrin_Harrison_DSTII_FP.out" 1431672097 855 81ce401456736cb8811100b7ccc0ad65 ""
-  "Zafrin_Harrison_DSTII_FP.tex" 1431672090 21541 c5e11fe52bb05e5cace3e0b2c1710ae4 ""
+  "Zafrin_Harrison_DSTII_FP.out" 1431698645 855 81ce401456736cb8811100b7ccc0ad65 ""
+  "Zafrin_Harrison_DSTII_FP.tex" 1431698613 21542 1745d9982e4ab4c4164130d9d3ec31cd ""
   "icmc2015template.sty" 1422408695 7246 567e83cf8e2bd68e7a9adf02c6f643e8 ""
   "targetcurve-eps-converted-to.pdf" 1431657643 22676 574503e804ce5c10104ad4d9803064bf ""
   "targetcurve.eps" 1431657608 27269 c002725c6df8f5503a945b0272ba4948 ""
@@ -92,9 +92,9 @@
   "whitenoise-eps-converted-to.pdf" 1431666333 31010 c74cc7ed0f5ab874ece0e18cc0a13db6 ""
   "whitenoise.eps" 1431665726 39764 22760c45e92872be56f343898f42fdd2 ""
   (generated)
-  "Zafrin_Harrison_DSTII_FP.out"
-  "/Users/harrison/Desktop/Github/Intelligent-Equalization/Paper/Zafrin_Harrison_DSTII_FP.pdf"
   "Zafrin_Harrison_DSTII_FP.pdf"
-  "/Users/harrison/Desktop/Github/Intelligent-Equalization/Paper/Zafrin_Harrison_DSTII_FP.log"
+  "/Users/harrison/Desktop/Github/Intelligent-Equalization/Paper/Zafrin_Harrison_DSTII_FP.pdf"
   "Zafrin_Harrison_DSTII_FP.aux"
+  "/Users/harrison/Desktop/Github/Intelligent-Equalization/Paper/Zafrin_Harrison_DSTII_FP.log"
   "Zafrin_Harrison_DSTII_FP.log"
+  "Zafrin_Harrison_DSTII_FP.out"
